@@ -82,6 +82,9 @@ init_NetBSD =  [
   'wscons.in',
   ]
 
+init_QNX = [
+  ]
+
 init_data = init_common
 if os == 'dragonfly'
   init_data = init_data + init_BSD
@@ -91,6 +94,8 @@ elif os == 'linux'
   init_data = init_data + init_Linux
 elif os == 'netbsd'
   init_data = init_data + init_BSD + init_NetBSD
+elif os == 'qnx'
+  init_data = init_QNX
   endif
 
 foreach init_d_file : init_data

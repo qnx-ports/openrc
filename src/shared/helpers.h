@@ -29,6 +29,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/memstream.h>
 
 #define ERRX do { fprintf (stderr, "out of memory\n"); exit (1); } while (0)
 

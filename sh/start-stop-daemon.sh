@@ -25,6 +25,11 @@ ssd_start()
 		notify="$ready"
 	fi
 
+	if [ -z "$priority" ]; then
+		# Default QNX service priority, just slightly higher than user processes
+		priority=20
+	fi
+
 	local _background=
 	ebegin "Starting ${name:-$RC_SVCNAME}"
 	if yesno "${command_background}"; then
@@ -46,7 +51,7 @@ ssd_start()
 	#the eval call is necessary for cases like:
 	# command_args="this \"is a\" test"
 	# to work properly.
-	eval start-stop-daemon --start \
+	eval on -p "$priority" start-stop-daemon --start \
 		--exec $command \
 		${chroot:+--chroot} $chroot \
 		${directory:+--chdir} $directory \

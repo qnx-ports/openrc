@@ -32,7 +32,7 @@
 #include "helpers.h"
 
 #if defined(__linux__) || (defined (__FreeBSD_kernel__) && defined(__GLIBC__)) \
-	|| defined(__GNU__)
+	|| defined(__GNU__) || defined(__QNX__)
 static bool
 pid_is_exec(pid_t pid, const char *exec)
 {

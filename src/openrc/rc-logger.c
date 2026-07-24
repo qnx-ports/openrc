@@ -36,6 +36,8 @@
 #  include <pty.h>
 #elif defined(__NetBSD__) || defined(__OpenBSD__)
 #  include <util.h>
+#elif defined(__QNX__)
+#  include <unix.h>
 #else
 #  include <libutil.h>
 #endif

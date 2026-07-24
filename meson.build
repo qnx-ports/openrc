@@ -56,7 +56,7 @@ pkg_prefix = get_option('pkg_prefix')
 if pkg_prefix == ''
   if os == 'dragonfly' or os == 'freebsd'
     pkg_prefix = '/usr/local'
-  elif os == 'gnu' or os == 'linux'
+  elif os == 'gnu' or os == 'linux' or os == 'qnx'
     pkg_prefix = '/usr'
   elif os == 'netbsd'
     pkg_prefix = '/usr/pkg'

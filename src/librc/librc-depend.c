@@ -25,8 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <time.h>
 #include <unistd.h>
+#include <time.h>
+extern time_t time(time_t *__timer);
 
 #include "queue.h"
 #include "librc.h"

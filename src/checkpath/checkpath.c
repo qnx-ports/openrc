@@ -80,7 +80,7 @@ static int get_dirfd(char *path, bool symlinks)
 
 	if (!path || *path != '/')
 		eerrorx("%s: empty or relative path", applet);
-	dirfd = openat(AT_FDCWD, "/", O_RDONLY);
+	dirfd = openat(AT_FDCWD, "/", O_RDONLY | O_DIRECTORY);
 	if (dirfd == -1)
 		eerrorx("%s: unable to open the root directory: %s", applet, strerror(errno));
 	ch = path;
@@ -96,7 +96,7 @@ static int get_dirfd(char *path, bool symlinks)
 #endif
 	if (!symlinks)
 		flags |= O_NOFOLLOW;
-	flags |= O_RDONLY;
+	flags |= O_RDONLY | O_DIRECTORY;
 	while (dirfd > 0 && item && components > 1) {
 		str = xstrdup(linkpath ? linkpath : item);
 		new_dirfd = openat(dirfd, str, flags);
@@ -192,6 +192,7 @@ static int do_create(inode_t type, const char *path, int dirfd, const char *name
 		break;
 	case inode_dir:
 		einfo("%s: creating directory", path);
+		flags |= O_DIRECTORY;
 
 		/* We do not recursively create parents */
 		if (mkdirat(dirfd, name, mode) == -1 && errno != EEXIST) {
@@ -224,7 +225,7 @@ static int do_create(inode_t type, const char *path, int dirfd, const char *name
 static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode, inode_t type,
 		bool trunc, bool chowner, bool writable, bool symlinks, bool selinux_on)
 {
-	int flags = O_NDELAY | O_NOCTTY | O_RDONLY | O_CLOEXEC | O_NOFOLLOW | (trunc ? O_TRUNC : 0);
+	int flags = O_NDELAY | O_NOCTTY | O_RDONLY | O_CLOEXEC | O_NOFOLLOW | (trunc ? O_TRUNC : 0) | (type == inode_dir ? O_DIRECTORY : 0);
 	const char *name = basename_c(path);
 	struct stat st;
 	int dirfd, fd;
