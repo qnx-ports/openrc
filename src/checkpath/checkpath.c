@@ -274,7 +274,8 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode, inode_t type,
 		}
 
 		einfo("%s: correcting mode", path);
-		if (fchmod(fd, mode)) {
+		// can't use fchmod because O_DIRECTORY shenanigans
+		if (fchmodat(dirfd, name, mode, 0)) {
 			eerror("%s: chmod: %s", applet, strerror(errno));
 			goto err;
 		}
@@ -292,7 +293,8 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode, inode_t type,
 		}
 
 		einfo("%s: correcting owner", path);
-		if (fchown(fd, uid, gid)) {
+		// can't use fchown because O_DIRECTORY shenanigans
+		if (fchownat(dirfd, name, uid, gid, 0)) {
 			eerror("%s: chown: %s", applet, strerror(errno));
 			goto err;
 		}
